@@ -2,6 +2,7 @@ package group1.habitAlnalysis.controller;
 
 import group1.habitAlnalysis.entity.GmailEntity;
 import group1.habitAlnalysis.model.GmailModel;
+import group1.habitAlnalysis.model.ResponseModel;
 import group1.habitAlnalysis.service.GmailService;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,7 +21,7 @@ public class GmailController {
     }
 
     @PostMapping("/api/gmail")
-    public String getGmailEntity(@RequestBody GmailEntity gmailEntity){
+    public ResponseModel getGmailEntity(@RequestBody GmailEntity gmailEntity){
         return this.gmailService.getGmailEntity(gmailEntity);
     }
 }

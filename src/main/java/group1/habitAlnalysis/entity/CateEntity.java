@@ -5,11 +5,11 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "image")
-public class ImageEntity {
+@Table(name = "category")
+public class CateEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private byte[] img;
+    private String imgUrl;
     private String category;
 }
