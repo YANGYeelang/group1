@@ -12,6 +12,6 @@ public class ImageEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private Blob img;
+    private String imgUrl;
     private String category;
 }

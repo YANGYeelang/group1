@@ -15,7 +15,7 @@ public class ImageController {
     public ImageController(ImageRepository imageRepository) {
         this.imageRepository = imageRepository;
     }
-
+    @CrossOrigin(origins = "http://localhost:5173")
     @GetMapping("/api/get/images")
     public List<ImageEntity> getImage() {
         return this.imageRepository.findAll();
