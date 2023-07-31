@@ -1,23 +1,34 @@
 package group1.habitAlnalysis.controller;
-
-import group1.habitAlnalysis.entity.ImageEntity;
 import group1.habitAlnalysis.repository.ImageRepository;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import group1.habitAlnalysis.service.ImageService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
+import java.io.IOException;
+
 @RestController
-@CrossOrigin(origins = "https://drive.google.com")
+//@CrossOrigin(origins = "https://drive.google.com")
 public class ImageController {
-    private final ImageRepository imageRepository;
+    private final ImageService service;
 
-    public ImageController(ImageRepository imageRepository) {
-        this.imageRepository = imageRepository;
+    public ImageController(ImageRepository imageRepository, ImageService service) {
+        this.service = service;
     }
-    @CrossOrigin(origins = "http://localhost:5173")
-    @GetMapping("/api/get/images")
-    public List<ImageEntity> getImage() {
-        return this.imageRepository.findAll();
+//    @CrossOrigin(origins = "http://localhost:5173")
+    @PostMapping("/api/upload/image")
+    public ResponseEntity<?> uploadImage(@RequestParam("image") MultipartFile file) throws IOException {
+        String uploadImage = service.uploadImage(file);
+        return ResponseEntity.status(HttpStatus.OK).body(uploadImage);
+    }
+
+    @GetMapping("/api/download/image")
+    public  ResponseEntity<?> downloadImage(@PathVariable String fileName){
+        byte[] image = service.downloadImage(fileName);
+        return ResponseEntity.status(HttpStatus.OK)
+                .contentType(MediaType.valueOf("image/png"))
+                .body(image);
     }
 }
