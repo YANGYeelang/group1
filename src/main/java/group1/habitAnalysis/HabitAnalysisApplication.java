@@ -1,13 +1,13 @@
-package group1.habitAlnalysis;
+package group1.habitAnalysis;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class HabitAlnalysisApplication {
+public class HabitAnalysisApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(HabitAlnalysisApplication.class, args);
+		SpringApplication.run(HabitAnalysisApplication.class, args);
 	}
 
 }
