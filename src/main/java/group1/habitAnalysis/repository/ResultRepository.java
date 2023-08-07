@@ -9,6 +9,6 @@ import java.util.List;
 
 @Repository
 public interface ResultRepository extends JpaRepository<ResultEntity, Long> {
-    List<ResultEntity> findAllByEmail(String email);
-
+    List<ResultEntity> findAllByUser(UserEntity user);
+    
 }

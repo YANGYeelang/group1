@@ -1,6 +1,7 @@
 package group1.habitAnalysis.controller;
 
 import group1.habitAnalysis.entity.ResultEntity;
+import group1.habitAnalysis.entity.UserEntity;
 import group1.habitAnalysis.model.SelectorModel;
 import group1.habitAnalysis.service.ResultService;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +25,7 @@ public class ResultController {
         return this.resultService.insertResult(selector);
     }
     @GetMapping("/api/get/result")
-    public ResponseEntity<List<ResultEntity>> getSelector(@RequestBody ResultEntity entity){
+    public ResponseEntity<List<ResultEntity>> getSelector(@RequestBody UserEntity entity){
         return this.resultService.getResult(entity);
     }
 }

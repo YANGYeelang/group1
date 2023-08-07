@@ -1,8 +1,11 @@
 package group1.habitAnalysis.service;
 
 import group1.habitAnalysis.entity.ResultEntity;
+import group1.habitAnalysis.entity.UserEntity;
 import group1.habitAnalysis.model.SelectorModel;
 import group1.habitAnalysis.repository.ResultRepository;
+import group1.habitAnalysis.repository.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -10,23 +13,28 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
+@Slf4j
 public class ResultService {
     private final ResultRepository resultRepository;
+    private final UserRepository userRepository;
 
-    public ResultService(ResultRepository resultRepository) {
+    public ResultService(ResultRepository resultRepository, UserRepository userRepository) {
         this.resultRepository = resultRepository;
+        this.userRepository = userRepository;
     }
 
     public ResponseEntity<ResultEntity> insertResult(SelectorModel selector) {
-
+        try{
         ResultEntity result = new ResultEntity();
         int cow = selector.getMostCow() - selector.getLeastCow();
         int rat = selector.getMostRat() - selector.getLeastRat();
         int bear = selector.getMostBear() - selector.getLeastBear();
         int eagle = selector.getMostEagle() - selector.getLeastEagle();
+
         int sum = cow+rat+bear+eagle;
 
-        result.setEmail(selector.getEmail());
+        UserEntity user = this.userRepository.findByEmail(selector.getEmail());
+        result.setUser(user);
 
         //set cow percentage
         if (cow > 0) {
@@ -103,11 +111,16 @@ public class ResultService {
         this.resultRepository.save(result);
 
     return ResponseEntity.status(HttpStatus.OK).body(result);
+        } catch (Exception e) {
+            log.info("Exception{}"+ e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
     }
 
-    public ResponseEntity<List<ResultEntity>> getResult(ResultEntity entity) {
-
-        List<ResultEntity> result = this.resultRepository.findAllByEmail(entity.getEmail());
+    public ResponseEntity<List<ResultEntity>> getResult(UserEntity entity) {
+        UserEntity user = new UserEntity();
+        user.setEmail(entity.getEmail());
+        List<ResultEntity> result = this.resultRepository.findAllByUser(user);
 
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
