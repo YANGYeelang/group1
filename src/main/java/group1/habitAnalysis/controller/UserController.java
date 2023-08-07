@@ -1,5 +1,6 @@
 package group1.habitAnalysis.controller;
 
+import group1.habitAnalysis.entity.ResultEntity;
 import group1.habitAnalysis.entity.UserEntity;
 import group1.habitAnalysis.service.UserService;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +20,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping("/api/user")
+    @PostMapping("/api/login")
     public ResponseEntity<?> getGmailEntity(@RequestBody UserEntity userEntity){
         return this.userService.getGmailEntity(userEntity);
     }

@@ -11,5 +11,8 @@ public class UserEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String email;
+//    @ManyToOne
+//    @JoinColumn(name = "email", referencedColumnName = "email")
+//    private ResultEntity result;
     private String userName;
 }
