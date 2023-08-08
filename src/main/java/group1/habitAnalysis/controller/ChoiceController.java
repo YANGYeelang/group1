@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 public class ChoiceController {
     private final ChoiceRepository choiceRepository;
@@ -18,7 +19,6 @@ public class ChoiceController {
         this.choiceRepository = choiceRepository;
     }
 
-    @CrossOrigin(origins = "http://localhost:5173")
     @GetMapping("/api/choice")
     public ResponseEntity<List<ChoiceEntity>> getChoice(){
         return ResponseEntity.status(HttpStatus.OK).body(choiceRepository.findAll());

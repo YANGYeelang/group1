@@ -22,7 +22,6 @@ public class UserService {
 
 
         UserEntity gmail = this.userRepository.findByEmail(userEntity.getEmail());
-        System.out.println("MY Gmail"+gmail);
         if(gmail == null){
             UserEntity gm = new UserEntity();
             gm.setUserName(userEntity.getUserName());

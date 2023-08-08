@@ -11,10 +11,10 @@ public class ResultEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private int cow;
-    private int rat;
-    private int bear;
-    private int eagle;
+    private float cow;
+    private float rat;
+    private float bear;
+    private float eagle;
     @ManyToOne
     @JoinColumn(name = "user_email",nullable = false)
     @JsonIgnore
