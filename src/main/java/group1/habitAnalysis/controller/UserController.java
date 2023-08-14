@@ -1,7 +1,7 @@
 package group1.habitAnalysis.controller;
 
-import group1.habitAnalysis.entity.ResultEntity;
 import group1.habitAnalysis.entity.UserEntity;
+import group1.habitAnalysis.model.UserModel;
 import group1.habitAnalysis.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -21,7 +21,7 @@ public class UserController {
     }
 
     @PostMapping("/api/login")
-    public ResponseEntity<?> getGmailEntity(@RequestBody UserEntity userEntity){
-        return this.userService.getGmailEntity(userEntity);
+    public ResponseEntity<?> getGmailEntity(@RequestBody UserModel userModel){
+        return this.userService.getGmailEntity(userModel);
     }
 }

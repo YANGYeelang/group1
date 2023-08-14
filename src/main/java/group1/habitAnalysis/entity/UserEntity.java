@@ -1,8 +1,9 @@
 package group1.habitAnalysis.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -10,9 +11,15 @@ import java.util.List;
 @Table(name = "user")
 public class UserEntity {
     @Id
+    @Column(nullable = false, length =100)
     private String email;
-    private String userName;
+    @Column(nullable = false, length = 100)
+    private String firstName;
+    @Column(nullable = false, length=100)
+    private String lastName;
+    private String imageUrl;
+    private LocalDateTime createDate;
 
     @OneToMany(mappedBy = "user", orphanRemoval = true)
-    private List<ResultEntity> result;
+    private List<UserHistoryEntity> userHistory;
 }

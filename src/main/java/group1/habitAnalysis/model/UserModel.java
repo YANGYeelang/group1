@@ -2,9 +2,13 @@ package group1.habitAnalysis.model;
 
 import lombok.Data;
 
+import java.time.LocalDateTime;
+
 @Data
 public class UserModel {
-    private Integer id;
     private String email;
-    private String userName;
+    private String firstName;
+    private String lastName;
+    private String imageUrl;
+    private LocalDateTime createDate;
 }
