@@ -17,9 +17,6 @@ public class ChoiceEntity {
     private String choiceTh;
     @Column(nullable = false)
     private String choiceEn;
-    @ManyToOne
-    @JoinColumn(name = "category_id", nullable = false)
-    @JsonIgnore
-    private CategoryEntity category;
+    private Integer categoryId;
 
 }

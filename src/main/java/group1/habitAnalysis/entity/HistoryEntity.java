@@ -14,10 +14,8 @@ public class HistoryEntity {
     @Id
     private String HistoryId;
     private LocalDateTime createDate;
-    @ManyToOne
-    @JoinColumn(name = "category_id", nullable = false)
-    @JsonIgnore
-    private CategoryEntity category;
+
+    private Integer categoryId;
 
     @ManyToOne
     @JoinColumn(name = "user_email", nullable = false)
