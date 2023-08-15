@@ -1,7 +1,6 @@
 package group1.habitAnalysis.service;
 
 import group1.habitAnalysis.entity.UserEntity;
-import group1.habitAnalysis.entity.UserHistoryEntity;
 import group1.habitAnalysis.model.UserModel;
 import group1.habitAnalysis.repository.UserRepository;
 import org.springframework.http.HttpStatus;

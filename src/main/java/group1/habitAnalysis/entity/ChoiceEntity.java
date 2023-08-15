@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.List;
+
 @Entity
 @Data
 @Table(name = "choice")
@@ -19,4 +21,5 @@ public class ChoiceEntity {
     @JoinColumn(name = "category_id", nullable = false)
     @JsonIgnore
     private CategoryEntity category;
+
 }

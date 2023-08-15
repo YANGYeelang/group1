@@ -3,21 +3,16 @@ package group1.habitAnalysis.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Data
-@Table(name = "user_history")
-public class UserHistoryEntity {
+@Table(name = "history")
+public class HistoryEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    @Column(nullable = false)
-    private String description_th;
-    @Column(nullable = false)
-    private String description_en;
+    private String HistoryId;
     private LocalDateTime createDate;
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
@@ -28,4 +23,6 @@ public class UserHistoryEntity {
     @JoinColumn(name = "user_email", nullable = false)
     @JsonIgnore
     private UserEntity user;
+    @OneToMany(mappedBy = "history", orphanRemoval = true)
+    private List<HistoryDetailEntity> historyDetail;
 }

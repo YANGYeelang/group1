@@ -21,5 +21,5 @@ public class UserEntity {
     private LocalDateTime createDate;
 
     @OneToMany(mappedBy = "user", orphanRemoval = true)
-    private List<UserHistoryEntity> userHistory;
+    private List<HistoryEntity> userHistory;
 }

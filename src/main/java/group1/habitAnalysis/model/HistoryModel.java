@@ -9,10 +9,8 @@ import java.time.LocalDateTime;
 //@Setter
 //@AllArgsConstructor
 //@NoArgsConstructor
-public class UserHistoryModel {
-    private Long id;
-    private String descriptionTh;
-    private String descriptionEn;
+public class HistoryModel {
+    private String historyId;
     private LocalDateTime createDate;
     private Integer categoryId;
     private String userEmail;

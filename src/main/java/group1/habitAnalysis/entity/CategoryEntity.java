@@ -17,7 +17,7 @@ public class CategoryEntity {
     @Column(nullable = false, length = 100)
     private String categoryNameEn;
     @OneToMany(mappedBy = "category", orphanRemoval = true)
-    private List<UserHistoryEntity> userHistory;
+    private List<HistoryEntity> userHistory;
     @OneToMany(mappedBy = "category", orphanRemoval = true)
     private List<ChoiceEntity> choice;
 }
