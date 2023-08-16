@@ -33,8 +33,8 @@ public class HistoryController {
     }
 
     @DeleteMapping("/api/delete/history")
-    public ResponseEntity<?> deleteHistory(@RequestBody HistoryModel user){
-        return this.historyService.deleteUserHistory(user);
+    public ResponseEntity<?> deleteHistory(@RequestParam String historyId){
+        return this.historyService.deleteUserHistory(historyId);
     }
 
 

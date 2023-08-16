@@ -68,14 +68,11 @@ public class HistoryService {
 
     //________________________________________Delete History_______________________________________________
 
-    public ResponseEntity<?> deleteUserHistory(HistoryModel user) {
-        UserEntity entity = this.userRepository.findByEmail(user.getUserEmail());
-        if (entity != null) {
-            historyRepository.deleteById(user.getHistoryId());
+    public ResponseEntity<?>
+    deleteUserHistory(String historyId) {
+            historyRepository.deleteById(historyId);
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
-        }
 
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
     }
 
     //________________________________________Post History Detail_______________________________________________
@@ -89,7 +86,7 @@ public class HistoryService {
 
             hd.setHistoryDetailId(UUID.randomUUID().toString());
                 HistoryEntity historyEntity = new HistoryEntity();
-                historyEntity.setHistoryId("649e7ee5-f28d-43f8-a5a7-fba0776066e4");
+                historyEntity.setHistoryId("59b94a4b-fa79-438b-ad70-880da7c18969");
                 hd.setHistory(historyEntity);
 
                 hd.setChoiceId(historyDetailModel.getChoiceId());
