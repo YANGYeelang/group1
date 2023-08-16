@@ -16,6 +16,8 @@ public class HistoryEntity {
     private LocalDateTime createDate;
 
     private Integer categoryId;
+    private String descriptionTh;
+    private String descriptionEn;
 
     @ManyToOne
     @JoinColumn(name = "user_email", nullable = false)

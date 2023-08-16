@@ -2,6 +2,7 @@ package group1.habitAnalysis.controller;
 
 import group1.habitAnalysis.entity.ChoiceEntity;
 import group1.habitAnalysis.entity.HistoryEntity;
+import group1.habitAnalysis.model.AllHistory;
 import group1.habitAnalysis.model.HistoryDetailModel;
 import group1.habitAnalysis.model.HistoryModel;
 import group1.habitAnalysis.repository.ChoiceRepository;
@@ -23,26 +24,22 @@ public class HistoryController {
         this.historyService = historyService;
     }
 
+
     @PostMapping("/api/post/history")
-    public ResponseEntity<?> setHistory(@RequestBody HistoryModel user){
-        return this.historyService.saveHistory(user);
+    public ResponseEntity<?> saveAllHistory(@RequestBody List<AllHistory> user){
+            return this.historyService.saveAllHistory(user);
     }
+
     @GetMapping("/api/get/history")
     public ResponseEntity<List<HistoryEntity>> getHistory(@RequestParam String email){
-        return this.historyService.getUserHistory(email);
+        return this.historyService.getHistory(email);
     }
 
     @DeleteMapping("/api/delete/history")
     public ResponseEntity<?> deleteHistory(@RequestParam String historyId){
-        return this.historyService.deleteUserHistory(historyId);
+        return this.historyService.deleteHistory(historyId);
     }
 
-
-    //______________________________________________History Detail ________________________________________
-    @PostMapping("/api/post/history/detail")
-    public ResponseEntity<?> postTrueDetail(@RequestBody List<HistoryDetailModel> historyDetail){
-        return this.historyService.postHistoryDetail(historyDetail);
-    }
 
     @PostMapping("/api/post/detail/choice")
     public  ResponseEntity<ChoiceEntity> getChoice(@RequestParam Integer choiceId){

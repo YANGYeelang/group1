@@ -11,7 +11,6 @@ import java.util.UUID;
 @Table(name = "history_detail")
 public class HistoryDetailEntity {
     @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String historyDetailId;
     @ManyToOne
     @JoinColumn(name = "history_id", nullable = false)

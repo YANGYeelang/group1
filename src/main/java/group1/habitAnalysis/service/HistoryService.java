@@ -1,6 +1,7 @@
 package group1.habitAnalysis.service;
 
 import group1.habitAnalysis.entity.*;
+import group1.habitAnalysis.model.AllHistory;
 import group1.habitAnalysis.model.HistoryDetailModel;
 import group1.habitAnalysis.model.HistoryModel;
 import group1.habitAnalysis.repository.HistoryDetailRepository;
@@ -33,32 +34,71 @@ public class HistoryService {
     private  String GHistoryId;
 
 //______________________________________________Post History_______________________________________
-    public ResponseEntity<?> saveHistory(HistoryModel user) {
-        UserEntity entity = this.userRepository.findByEmail(user.getUserEmail());
 
-        if(entity != null){
-            HistoryEntity history = new HistoryEntity();
+    public ResponseEntity<?> saveAllHistory(List<AllHistory> user) {
+        String historyId = null;
 
-            history.setHistoryId(UUID.randomUUID().toString());
-            history.setCreateDate(LocalDateTime.parse(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss"))));
+        AllHistory allHistory = new AllHistory();
+        for (AllHistory history : user) {
+            allHistory.setUserEmail(history.getUserEmail());
+            allHistory.setChoiceId(history.getChoiceId());
+            allHistory.setCategoryId(history.getCategoryId());
+            allHistory.setDescriptionEn(history.getDescriptionEn());
+            allHistory.setDescriptionTh(history.getDescriptionTh());
 
-            UserEntity userEntity = new UserEntity();
-            userEntity.setEmail(user.getUserEmail());
-            history.setUser(userEntity);
-
-            history.setCategoryId(user.getCategoryId());
-
-            GHistoryId = history.getHistoryId();
-            this.historyRepository.save(history);
-            return ResponseEntity.status(HttpStatus.OK).body("success");
+            break;
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("You need to login");
+        try {
+            UserEntity entity = this.userRepository.findByEmail(allHistory.getUserEmail());
+
+            if(entity != null){
+                HistoryEntity history = new HistoryEntity();
+
+                history.setHistoryId(UUID.randomUUID().toString());
+                history.setCreateDate(LocalDateTime.parse(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss"))));
+
+                UserEntity userEntity = new UserEntity();
+                userEntity.setEmail(allHistory.getUserEmail());
+                history.setUser(userEntity);
+
+                history.setCategoryId(allHistory.getCategoryId());
+                history.setDescriptionTh(allHistory.getDescriptionTh());
+                history.setDescriptionEn(allHistory.getDescriptionEn());
+
+                historyId = history.getHistoryId();
+                this.historyRepository.save(history);
+//                return ResponseEntity.status(HttpStatus.OK).body("success");
+            }
+//        }catch (Exception e){
+//        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("You need to login");
+//        }
+//
+//
+//        try {
+            HistoryDetailEntity hd = new HistoryDetailEntity();
+            int i = 0;
+            for (AllHistory allhistory : user){
+                i += 1;
+                boolean type = i <= 10;
+
+                hd.setHistoryDetailId(UUID.randomUUID().toString());
+                HistoryEntity historyEntity = new HistoryEntity();
+                historyEntity.setHistoryId(historyId);
+                hd.setHistory(historyEntity);
+
+                hd.setChoiceId(allhistory.getChoiceId());
+                hd.setType(type);
+                historyDetailRepository.save(hd);
+            }
+            return ResponseEntity.status(HttpStatus.OK).body("success");
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Couldn't find History");
+        }
+
     }
-
-
     //__________________________________________Get History_______________________________________________
 
-    public ResponseEntity<List<HistoryEntity>> getUserHistory(String email) {
+    public ResponseEntity<List<HistoryEntity>> getHistory(String email) {
 
         List<HistoryEntity> history = this.historyRepository.findAllByUserEmail(email);
 //        List<UserHistoryEntity> result = new ArrayList<>();
@@ -68,31 +108,17 @@ public class HistoryService {
 
     //________________________________________Delete History_______________________________________________
 
-    public ResponseEntity<?>
-    deleteUserHistory(String historyId) {
+    public ResponseEntity<?> deleteHistory(String historyId) {
+           Optional<HistoryEntity> history = historyRepository.findById(historyId);
+           if (history.isPresent()){
             historyRepository.deleteById(historyId);
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+           }
+           return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Couldn't not find history match: "+ historyId);
 
     }
 
     //________________________________________Post History Detail_______________________________________________
 
-    public ResponseEntity<?> postHistoryDetail(List<HistoryDetailModel> historyDetail) {
-            HistoryDetailEntity hd = new HistoryDetailEntity();
-            int i = 0;
-        for (HistoryDetailModel historyDetailModel : historyDetail){
-                i += 1;
-                boolean type = i <= 10;
 
-            hd.setHistoryDetailId(UUID.randomUUID().toString());
-                HistoryEntity historyEntity = new HistoryEntity();
-                historyEntity.setHistoryId("59b94a4b-fa79-438b-ad70-880da7c18969");
-                hd.setHistory(historyEntity);
-
-                hd.setChoiceId(historyDetailModel.getChoiceId());
-                hd.setType(type);
-            historyDetailRepository.save(hd);
-        }
-        return ResponseEntity.status(HttpStatus.OK).body("success");
-    }
 }
