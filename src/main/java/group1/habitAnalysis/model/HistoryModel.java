@@ -12,6 +12,8 @@ import java.time.LocalDateTime;
 public class HistoryModel {
     private String historyId;
     private LocalDateTime createDate;
+    private String descriptionTh;
+    private String descriptionEn;
     private Integer categoryId;
     private String userEmail;
 }

@@ -50,6 +50,8 @@ public class HistoryService {
             userEntity.setEmail(user.getUserEmail());
             history.setUser(userEntity);
 
+            history.setDescriptionTh(user.getDescriptionTh());
+            history.setDescriptionEn(user.getDescriptionEn());
             history.setCategoryId(user.getCategoryId());
 
             GHistoryId = history.getHistoryId();
@@ -95,7 +97,7 @@ public class HistoryService {
 
                 hd.setHistoryDetailId(UUID.randomUUID().toString());
                 HistoryEntity historyEntity = new HistoryEntity();
-                historyEntity.setHistoryId("21e7cdea-d483-4f31-958a-190bbfeddb15");
+                historyEntity.setHistoryId("c0f8e087-5575-4770-b7ef-6c5917fe345c");
                 hd.setHistory(historyEntity);
 
                 hd.setChoiceId(historyDetailModel.getChoiceId());
