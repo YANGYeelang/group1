@@ -1,7 +1,6 @@
 package group1.habitAnalysis.service;
 
 import group1.habitAnalysis.entity.*;
-import group1.habitAnalysis.model.ChoiceDetailModel;
 import group1.habitAnalysis.model.HistoryDetailModel;
 import group1.habitAnalysis.model.HistoryModel;
 import group1.habitAnalysis.repository.ChoiceRepository;
@@ -67,7 +66,6 @@ public class HistoryService {
     public ResponseEntity<List<HistoryEntity>> getHistory(String email) {
 
         List<HistoryEntity> history = this.historyRepository.findAllByUserEmail(email);
-//        List<UserHistoryEntity> result = new ArrayList<>();
 
         return ResponseEntity.status(HttpStatus.OK).body(history);
     }
@@ -120,13 +118,13 @@ public class HistoryService {
         historyEntity.setHistoryId(historyId);
         List<HistoryDetailEntity> historyDetail = this.historyDetailRepository.findAllByHistory(historyEntity);
 
-            List<ChoiceDetailModel> choices = new ArrayList<>();
+            List<HistoryDetailModel> choices = new ArrayList<>();
             for (HistoryDetailEntity detail : historyDetail) {
                 Optional<ChoiceEntity> choice = this.choiceRepository.findById(detail.getChoiceId());
                 if (choice.isPresent()) {
-                    ChoiceDetailModel choiceModel = new ChoiceDetailModel();
+                    HistoryDetailModel choiceModel = new HistoryDetailModel();
                     ChoiceEntity choiceEntity = choice.get();
-                    choiceModel.setId(choiceEntity.getId());
+                    choiceModel.setChoiceId(choiceEntity.getId());
                     choiceModel.setChoiceEn(choiceEntity.getChoiceEn());
                     choiceModel.setChoiceTh(choiceEntity.getChoiceTh());
 
@@ -141,5 +139,14 @@ public class HistoryService {
         } catch (Exception e) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error");
     }
+    }
+
+    public ResponseEntity<HistoryEntity> getHistoryById(String historyId) {
+        Optional<HistoryEntity> historyEntity = this.historyRepository.findById(historyId);
+        if(historyEntity.isPresent()){
+            HistoryEntity history = historyEntity.get();
+            return ResponseEntity.status(HttpStatus.OK).body(history);
+        }
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
     }
 }

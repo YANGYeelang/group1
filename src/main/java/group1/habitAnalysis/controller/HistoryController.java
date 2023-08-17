@@ -31,6 +31,11 @@ public class HistoryController {
         return this.historyService.getHistory(email);
     }
 
+    @GetMapping("/api/get/history/byId")
+    public ResponseEntity<HistoryEntity> getHistoryById(@RequestParam String historyId){
+        return this.historyService.getHistoryById(historyId);
+    }
+
     @DeleteMapping("/api/delete/history")
     public ResponseEntity<?> deleteHistory(@RequestParam String historyId){
         return this.historyService.deleteHistory(historyId);
@@ -47,5 +52,7 @@ public class HistoryController {
     public ResponseEntity<?> getHistoryDetail(@RequestParam String historyId){
         return this.historyService.getHistoryDetail(historyId);
     }
+
+
 
 }
