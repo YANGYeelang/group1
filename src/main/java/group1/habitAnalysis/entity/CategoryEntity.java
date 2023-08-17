@@ -2,6 +2,7 @@ package group1.habitAnalysis.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -17,4 +18,6 @@ public class CategoryEntity {
     @Column(nullable = false, length = 100)
     private String categoryNameEn;
 
+    @OneToMany(mappedBy = "category", orphanRemoval = true)
+    private List<ChoiceEntity> choiceEntities;
 }

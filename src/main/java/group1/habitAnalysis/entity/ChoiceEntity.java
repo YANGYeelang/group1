@@ -3,6 +3,7 @@ package group1.habitAnalysis.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -17,6 +18,12 @@ public class ChoiceEntity {
     private String choiceTh;
     @Column(nullable = false)
     private String choiceEn;
-    private Integer categoryId;
+    @ManyToOne
+    @JoinColumn(name = "category_id", nullable = false)
+    @JsonIgnore
+    private CategoryEntity category;
+
+//    @OneToMany(mappedBy = "choice", orphanRemoval = true)
+//    private List<HistoryDetailEntity> historyDetail ;
 
 }

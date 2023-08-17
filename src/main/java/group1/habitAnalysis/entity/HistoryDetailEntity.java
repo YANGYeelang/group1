@@ -19,4 +19,9 @@ public class HistoryDetailEntity {
 
     private Integer choiceId;
     private boolean type;
+
+//    @ManyToOne
+//    @JoinColumn(name = "choice_id")
+//    @JoinColumn
+//    private ChoiceEntity choice;
 }

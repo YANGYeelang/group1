@@ -1,6 +1,7 @@
 package group1.habitAnalysis.service;
 
 import group1.habitAnalysis.entity.*;
+import group1.habitAnalysis.model.ChoiceDetailModel;
 import group1.habitAnalysis.model.HistoryDetailModel;
 import group1.habitAnalysis.model.HistoryModel;
 import group1.habitAnalysis.repository.ChoiceRepository;
@@ -59,7 +60,7 @@ public class HistoryService {
     }
 
 
-    //__________________________________________Get History_______________________________________________
+    //__________________________________________Get History by email_______________________________________________
 
     public ResponseEntity<List<HistoryEntity>> getHistory(String email) {
 
@@ -85,21 +86,24 @@ public class HistoryService {
 
     public ResponseEntity<?> postHistoryDetail(List<HistoryDetailModel> historyDetail) {
         try {
-            HistoryDetailEntity hd = new HistoryDetailEntity();
+            List<HistoryDetailEntity> result = new ArrayList<>();
             int i = 0;
             for (HistoryDetailModel historyDetailModel : historyDetail){
                 i += 1;
                 boolean type = i <= 10;
+                HistoryDetailEntity hd = new HistoryDetailEntity();
 
                 hd.setHistoryDetailId(UUID.randomUUID().toString());
                 HistoryEntity historyEntity = new HistoryEntity();
-                historyEntity.setHistoryId(GHistoryId);
+                historyEntity.setHistoryId("21e7cdea-d483-4f31-958a-190bbfeddb15");
                 hd.setHistory(historyEntity);
 
                 hd.setChoiceId(historyDetailModel.getChoiceId());
                 hd.setType(type);
-                historyDetailRepository.save(hd);
+
+                result.add(hd);
             }
+            historyDetailRepository.saveAll(result);
             return ResponseEntity.status(HttpStatus.OK).body("success");
         }catch (Exception e){
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Couldn't find History");
@@ -114,12 +118,21 @@ public class HistoryService {
         historyEntity.setHistoryId(historyId);
         List<HistoryDetailEntity> historyDetail = this.historyDetailRepository.findAllByHistory(historyEntity);
 
-            List<ChoiceEntity> choices = new ArrayList<>();
+            List<ChoiceDetailModel> choices = new ArrayList<>();
             for (HistoryDetailEntity detail : historyDetail) {
                 Optional<ChoiceEntity> choice = this.choiceRepository.findById(detail.getChoiceId());
                 if (choice.isPresent()) {
+                    ChoiceDetailModel choiceModel = new ChoiceDetailModel();
                     ChoiceEntity choiceEntity = choice.get();
-                    choices.add(choiceEntity);
+                    choiceModel.setId(choiceEntity.getId());
+                    choiceModel.setChoiceEn(choiceEntity.getChoiceEn());
+                    choiceModel.setChoiceTh(choiceEntity.getChoiceTh());
+
+                    CategoryEntity entity = choiceEntity.getCategory();
+                    choiceModel.setCategoryId(entity.getId());
+                    choiceModel.setType(detail.isType());
+
+                    choices.add(choiceModel);
                 }
             }
             return ResponseEntity.status(HttpStatus.OK).body(choices);
