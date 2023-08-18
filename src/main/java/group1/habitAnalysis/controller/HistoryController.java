@@ -27,12 +27,12 @@ public class HistoryController {
 
 
     @GetMapping("/api/get/history")
-    public ResponseEntity<List<HistoryEntity>> getHistory(@RequestParam String email){
+    public ResponseEntity<?> getHistory(@RequestParam String email){
         return this.historyService.getHistory(email);
     }
 
     @GetMapping("/api/get/history/byId")
-    public ResponseEntity<HistoryEntity> getHistoryById(@RequestParam String historyId){
+    public ResponseEntity<?> getHistoryById(@RequestParam String historyId){
         return this.historyService.getHistoryById(historyId);
     }
 

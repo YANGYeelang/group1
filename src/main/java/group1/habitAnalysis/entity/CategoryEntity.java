@@ -20,4 +20,7 @@ public class CategoryEntity {
 
     @OneToMany(mappedBy = "category", orphanRemoval = true)
     private List<ChoiceEntity> choiceEntities;
+
+    @OneToMany(mappedBy = "category", orphanRemoval = true)
+    private List<HistoryEntity> historyEntities;
 }

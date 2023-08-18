@@ -1,8 +1,10 @@
 package group1.habitAnalysis.model;
 
+import group1.habitAnalysis.entity.HistoryDetailEntity;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 //@Getter
@@ -16,4 +18,5 @@ public class HistoryModel {
     private String descriptionEn;
     private Integer categoryId;
     private String userEmail;
+    private List<DetailModel> historyDetail;
 }

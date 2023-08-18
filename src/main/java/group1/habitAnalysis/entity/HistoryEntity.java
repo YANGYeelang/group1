@@ -15,7 +15,7 @@ public class HistoryEntity {
     private String HistoryId;
     private LocalDateTime createDate;
 
-    private Integer categoryId;
+//    private Integer categoryId;
     private String descriptionTh;
     private String descriptionEn;
 
@@ -23,6 +23,12 @@ public class HistoryEntity {
     @JoinColumn(name = "user_email", nullable = false)
     @JsonIgnore
     private UserEntity user;
+
+    @ManyToOne
+    @JoinColumn(name = "category_id", nullable = false)
+    @JsonIgnore
+    private CategoryEntity category;
+
     @OneToMany(mappedBy = "history", orphanRemoval = true)
     private List<HistoryDetailEntity> historyDetail;
 }

@@ -23,7 +23,7 @@ public class ChoiceEntity {
     @JsonIgnore
     private CategoryEntity category;
 
-//    @OneToMany(mappedBy = "choice", orphanRemoval = true)
-//    private List<HistoryDetailEntity> historyDetail ;
+    @OneToMany(mappedBy = "choice", orphanRemoval = true, cascade = CascadeType.ALL)
+    private List<HistoryDetailEntity> historyDetail;
 
 }
