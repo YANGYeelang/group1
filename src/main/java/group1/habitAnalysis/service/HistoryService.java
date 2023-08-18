@@ -155,7 +155,7 @@ public class HistoryService {
 
                 hd.setHistoryDetailId(UUID.randomUUID().toString());
                 HistoryEntity historyEntity = new HistoryEntity();
-                historyEntity.setHistoryId("8bcf7c21-1ce2-41ff-87a7-f84b42f50f63");
+                historyEntity.setHistoryId(GHistoryId);
                 hd.setHistory(historyEntity);
 
                 ChoiceEntity entity = new ChoiceEntity();
