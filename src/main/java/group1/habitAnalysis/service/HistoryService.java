@@ -4,10 +4,7 @@ import group1.habitAnalysis.entity.*;
 import group1.habitAnalysis.model.DetailModel;
 import group1.habitAnalysis.model.HistoryDetailModel;
 import group1.habitAnalysis.model.HistoryModel;
-import group1.habitAnalysis.repository.ChoiceRepository;
-import group1.habitAnalysis.repository.HistoryDetailRepository;
-import group1.habitAnalysis.repository.HistoryRepository;
-import group1.habitAnalysis.repository.UserRepository;
+import group1.habitAnalysis.repository.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,14 +24,16 @@ public class HistoryService {
     private final HistoryRepository historyRepository;
     private final HistoryDetailRepository historyDetailRepository;
     private final ChoiceRepository choiceRepository;
+    private final CategoryRepository categoryRepository;
 
-    public HistoryService(UserRepository userRepository, HistoryRepository historyRepository, HistoryDetailRepository historyDetailRepository, ChoiceRepository choiceRepository) {
+    public HistoryService(UserRepository userRepository, HistoryRepository historyRepository, HistoryDetailRepository historyDetailRepository, ChoiceRepository choiceRepository, CategoryRepository categoryRepository) {
         this.userRepository = userRepository;
         this.historyRepository = historyRepository;
         this.historyDetailRepository = historyDetailRepository;
         this.choiceRepository = choiceRepository;
+        this.categoryRepository = categoryRepository;
     }
-    private  String GHistoryId;
+    private   String GHistoryId;
 
 //______________________________________________Post History_______________________________________
     public ResponseEntity<?> saveHistory(HistoryModel user)  {
@@ -50,8 +49,6 @@ public class HistoryService {
             userEntity.setEmail(user.getUserEmail());
             history.setUser(userEntity);
 
-            history.setDescriptionTh(user.getDescriptionTh());
-            history.setDescriptionEn(user.getDescriptionEn());
             CategoryEntity categoryEntity = new CategoryEntity();
             categoryEntity.setId(user.getCategoryId());
             history.setCategory(categoryEntity);
@@ -74,9 +71,8 @@ public class HistoryService {
                 HistoryModel historyModel = new HistoryModel();
                 historyModel.setHistoryId(historyEntity.getHistoryId());
                 historyModel.setCreateDate(historyEntity.getCreateDate());
-                historyModel.setDescriptionTh(historyEntity.getDescriptionTh());
-                historyModel.setDescriptionEn(historyEntity.getDescriptionEn());
                 historyModel.setCategoryId(historyEntity.getCategory().getId());
+//                historyModel.setDescription_th();
 
                 List<HistoryDetailEntity> Models = historyEntity.getHistoryDetail();
                 List<DetailModel> DetailModels = new ArrayList<>();
@@ -108,8 +104,6 @@ public class HistoryService {
             HistoryModel historyModel = new HistoryModel();
             historyModel.setHistoryId(history.getHistoryId());
             historyModel.setCreateDate(history.getCreateDate());
-            historyModel.setDescriptionTh(history.getDescriptionTh());
-            historyModel.setDescriptionEn(history.getDescriptionEn());
             historyModel.setCategoryId(history.getCategory().getId());
 
             List<HistoryDetailEntity> Models = history.getHistoryDetail();
@@ -146,39 +140,43 @@ public class HistoryService {
 
     public ResponseEntity<?> postHistoryDetail(List<HistoryDetailModel> historyDetail) {
         try {
-            List<HistoryDetailEntity> result = new ArrayList<>();
-            int i = 0;
-            for (HistoryDetailModel historyDetailModel : historyDetail){
-                i += 1;
-                boolean type = i <= 10;
-                HistoryDetailEntity hd = new HistoryDetailEntity();
+            Optional<HistoryEntity> history = this.historyRepository.findById("1d3d3e13-67b4-4872-9162-53be62d5708e");
+            if (history.isPresent()) {
+                List<HistoryDetailEntity> result = new ArrayList<>();
+                int i = 0;
+                for (HistoryDetailModel historyDetailModel : historyDetail) {
+                    i += 1;
+                    boolean type = i <= 10;
+                    HistoryDetailEntity hd = new HistoryDetailEntity();
 
-                hd.setHistoryDetailId(UUID.randomUUID().toString());
-                HistoryEntity historyEntity = new HistoryEntity();
-                historyEntity.setHistoryId(GHistoryId);
-                hd.setHistory(historyEntity);
+                    hd.setHistoryDetailId(UUID.randomUUID().toString());
+                    HistoryEntity historyEntity = new HistoryEntity();
+                    historyEntity.setHistoryId("1d3d3e13-67b4-4872-9162-53be62d5708e");
+                    hd.setHistory(historyEntity);
 
-                ChoiceEntity entity = new ChoiceEntity();
-                entity.setId(historyDetailModel.getChoiceId());
-                hd.setChoice(entity);
-                hd.setType(type);
+                    ChoiceEntity entity = new ChoiceEntity();
+                    entity.setId(historyDetailModel.getChoiceId());
+                    hd.setChoice(entity);
+                    hd.setType(type);
 
-                result.add(hd);
+                    result.add(hd);
+                }
+                historyDetailRepository.saveAll(result);
+                return ResponseEntity.status(HttpStatus.OK).body("success");
             }
-            historyDetailRepository.saveAll(result);
-            return ResponseEntity.status(HttpStatus.OK).body("success");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No history id available");
         }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Couldn't find History");
+            throw  new RuntimeException(e.getMessage());
         }
 
     }
 
     //***********************************Get History Details by historyId*********************************
 
-    public ResponseEntity<?> getHistoryDetail(String historyId) {
+    public ResponseEntity<?> getHistoryDetail(HistoryModel history) {
     try{
         HistoryEntity historyEntity = new HistoryEntity();
-        historyEntity.setHistoryId(historyId);
+        historyEntity.setHistoryId(history.getHistoryId());
         List<HistoryDetailEntity> historyDetail = this.historyDetailRepository.findAllByHistory(historyEntity);
             if (historyDetail.size() > 0) {
 
@@ -192,6 +190,12 @@ public class HistoryService {
                         choiceModel.setChoiceId(choiceEntity.getId());
                         choiceModel.setChoiceEn(choiceEntity.getChoiceEn());
                         choiceModel.setChoiceTh(choiceEntity.getChoiceTh());
+                        Optional<CategoryEntity> category = this.categoryRepository.findById(history.getCategoryId());
+                        if (category.isPresent()){
+                            CategoryEntity entity = category.get();
+                            choiceModel.setDescription_th(entity.getDescription_th());
+                            choiceModel.setDescription_en(entity.getDescription_en());
+                        }
 
                         CategoryEntity entity = choiceEntity.getCategory();
                         choiceModel.setCategoryId(entity.getId());
@@ -202,9 +206,9 @@ public class HistoryService {
                 }
                 return ResponseEntity.status(HttpStatus.OK).body(choices);
             }
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid HistoryDetail");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Invalid HistoryDetail");
         } catch (Exception e) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error");
+        throw new RuntimeException(e);
     }
     }
 

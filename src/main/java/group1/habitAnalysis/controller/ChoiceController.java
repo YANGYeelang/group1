@@ -6,9 +6,7 @@ import group1.habitAnalysis.model.ChoiceModel;
 import group1.habitAnalysis.repository.ChoiceRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,4 +37,10 @@ public class ChoiceController {
 
         return ResponseEntity.status(HttpStatus.OK).body(choices);
     }
+
+//    @GetMapping("/api/choice/by/categoryId")
+//    public ResponseEntity<?> getChoiceByCategoryId(@RequestBody Integer categoryId){
+//        List<ChoiceEntity> choiceEntities = this.choiceRepository.findAllByCategoryId(categoryId);
+//        return ResponseEntity.status(HttpStatus.OK).body(null);
+//    }
 }

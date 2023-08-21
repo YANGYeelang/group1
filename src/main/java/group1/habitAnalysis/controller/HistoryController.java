@@ -49,8 +49,8 @@ public class HistoryController {
     }
 
     @GetMapping("/api/get/history/detail")
-    public ResponseEntity<?> getHistoryDetail(@RequestParam String historyId){
-        return this.historyService.getHistoryDetail(historyId);
+    public ResponseEntity<?> getHistoryDetail(@RequestBody HistoryModel history){
+        return this.historyService.getHistoryDetail(history);
     }
 
 
