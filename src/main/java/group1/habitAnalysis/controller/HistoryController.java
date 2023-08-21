@@ -1,28 +1,33 @@
 package group1.habitAnalysis.controller;
 
-import group1.habitAnalysis.entity.HistoryEntity;
+import group1.habitAnalysis.entity.CategoryEntity;
 import group1.habitAnalysis.model.HistoryDetailModel;
 import group1.habitAnalysis.model.HistoryModel;
+import group1.habitAnalysis.repository.CategoryRepository;
 import group1.habitAnalysis.repository.ChoiceRepository;
 import group1.habitAnalysis.service.HistoryService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 public class HistoryController {
     private final HistoryService historyService;
     private ChoiceRepository choiceRepository;
+    private final CategoryRepository categoryRepository;
 
-    public HistoryController(HistoryService historyService) {
+    public HistoryController(HistoryService historyService, CategoryRepository categoryRepository) {
         this.historyService = historyService;
+        this.categoryRepository = categoryRepository;
     }
 
     @PostMapping("/api/post/history")
-    public ResponseEntity<?> setHistory(@RequestBody HistoryModel user) {
-        return this.historyService.saveHistory(user);
+    public ResponseEntity<?> setHistory(@RequestBody HistoryModel historyModel) {
+        return this.historyService.saveHistory(historyModel);
     }
 
 
@@ -49,8 +54,20 @@ public class HistoryController {
     }
 
     @GetMapping("/api/get/history/detail")
-    public ResponseEntity<?> getHistoryDetail(@RequestBody HistoryModel history){
-        return this.historyService.getHistoryDetail(history);
+    public ResponseEntity<?> getHistoryDetail(@RequestParam String historyId){
+        return this.historyService.getHistoryDetail(historyId);
+    }
+    @GetMapping("/api/get/description")
+    public ResponseEntity<?> getDescription(Integer categoryId){
+        Optional<CategoryEntity> category = this.categoryRepository.findById(categoryId);
+        if (category.isPresent()){
+            CategoryEntity entity = category.get();
+            CategoryEntity categoryEntity = new CategoryEntity();
+            categoryEntity.setDescription_th(entity.getDescription_th());
+            categoryEntity.setDescription_en(entity.getDescription_en());
+        return ResponseEntity.status(HttpStatus.OK).body(categoryEntity);
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No description match categoryId");
     }
 
 

@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 public class ChoiceController {
     private final ChoiceRepository choiceRepository;
@@ -38,9 +38,4 @@ public class ChoiceController {
         return ResponseEntity.status(HttpStatus.OK).body(choices);
     }
 
-//    @GetMapping("/api/choice/by/categoryId")
-//    public ResponseEntity<?> getChoiceByCategoryId(@RequestBody Integer categoryId){
-//        List<ChoiceEntity> choiceEntities = this.choiceRepository.findAllByCategoryId(categoryId);
-//        return ResponseEntity.status(HttpStatus.OK).body(null);
-//    }
 }

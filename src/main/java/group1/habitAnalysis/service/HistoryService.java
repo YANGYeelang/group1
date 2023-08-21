@@ -24,40 +24,41 @@ public class HistoryService {
     private final HistoryRepository historyRepository;
     private final HistoryDetailRepository historyDetailRepository;
     private final ChoiceRepository choiceRepository;
-    private final CategoryRepository categoryRepository;
 
-    public HistoryService(UserRepository userRepository, HistoryRepository historyRepository, HistoryDetailRepository historyDetailRepository, ChoiceRepository choiceRepository, CategoryRepository categoryRepository) {
+    public HistoryService(UserRepository userRepository, HistoryRepository historyRepository, HistoryDetailRepository historyDetailRepository, ChoiceRepository choiceRepository) {
         this.userRepository = userRepository;
         this.historyRepository = historyRepository;
         this.historyDetailRepository = historyDetailRepository;
         this.choiceRepository = choiceRepository;
-        this.categoryRepository = categoryRepository;
     }
     private   String GHistoryId;
 
 //______________________________________________Post History_______________________________________
-    public ResponseEntity<?> saveHistory(HistoryModel user)  {
-        UserEntity entity = this.userRepository.findByEmail(user.getUserEmail());
+    public ResponseEntity<?> saveHistory(HistoryModel historyModel)  {
+        if (historyModel.getCategoryId() < 4) {
+            UserEntity entity = this.userRepository.findByEmail(historyModel.getUserEmail());
 
-        if(entity != null){
-            HistoryEntity history = new HistoryEntity();
+            if (entity != null) {
+                HistoryEntity history = new HistoryEntity();
 
-            history.setHistoryId(UUID.randomUUID().toString());
-            history.setCreateDate(LocalDateTime.parse(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss"))));
+                history.setHistoryId(UUID.randomUUID().toString());
+                history.setCreateDate(LocalDateTime.parse(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss"))));
 
-            UserEntity userEntity = new UserEntity();
-            userEntity.setEmail(user.getUserEmail());
-            history.setUser(userEntity);
+                UserEntity userEntity = new UserEntity();
+                userEntity.setEmail(historyModel.getUserEmail());
+                history.setUser(userEntity);
 
-            CategoryEntity categoryEntity = new CategoryEntity();
-            categoryEntity.setId(user.getCategoryId());
-            history.setCategory(categoryEntity);
+                CategoryEntity categoryEntity = new CategoryEntity();
+                categoryEntity.setId(historyModel.getCategoryId());
+                history.setCategory(categoryEntity);
 
-            GHistoryId = history.getHistoryId();
-            this.historyRepository.save(history);
-            return ResponseEntity.status(HttpStatus.OK).body("success");
+                GHistoryId = history.getHistoryId();
+                this.historyRepository.save(history);
+                return ResponseEntity.status(HttpStatus.OK).body("success");
+            }
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("You need to login");
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("You need to login");
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Category Id not available");
     }
 
 
@@ -140,7 +141,7 @@ public class HistoryService {
 
     public ResponseEntity<?> postHistoryDetail(List<HistoryDetailModel> historyDetail) {
         try {
-            Optional<HistoryEntity> history = this.historyRepository.findById("1d3d3e13-67b4-4872-9162-53be62d5708e");
+            Optional<HistoryEntity> history = this.historyRepository.findById(GHistoryId);
             if (history.isPresent()) {
                 List<HistoryDetailEntity> result = new ArrayList<>();
                 int i = 0;
@@ -151,7 +152,7 @@ public class HistoryService {
 
                     hd.setHistoryDetailId(UUID.randomUUID().toString());
                     HistoryEntity historyEntity = new HistoryEntity();
-                    historyEntity.setHistoryId("1d3d3e13-67b4-4872-9162-53be62d5708e");
+                    historyEntity.setHistoryId(GHistoryId);
                     hd.setHistory(historyEntity);
 
                     ChoiceEntity entity = new ChoiceEntity();
@@ -173,10 +174,10 @@ public class HistoryService {
 
     //***********************************Get History Details by historyId*********************************
 
-    public ResponseEntity<?> getHistoryDetail(HistoryModel history) {
+    public ResponseEntity<?> getHistoryDetail(String historyId) {
     try{
         HistoryEntity historyEntity = new HistoryEntity();
-        historyEntity.setHistoryId(history.getHistoryId());
+        historyEntity.setHistoryId(historyId);
         List<HistoryDetailEntity> historyDetail = this.historyDetailRepository.findAllByHistory(historyEntity);
             if (historyDetail.size() > 0) {
 
@@ -190,12 +191,6 @@ public class HistoryService {
                         choiceModel.setChoiceId(choiceEntity.getId());
                         choiceModel.setChoiceEn(choiceEntity.getChoiceEn());
                         choiceModel.setChoiceTh(choiceEntity.getChoiceTh());
-                        Optional<CategoryEntity> category = this.categoryRepository.findById(history.getCategoryId());
-                        if (category.isPresent()){
-                            CategoryEntity entity = category.get();
-                            choiceModel.setDescription_th(entity.getDescription_th());
-                            choiceModel.setDescription_en(entity.getDescription_en());
-                        }
 
                         CategoryEntity entity = choiceEntity.getCategory();
                         choiceModel.setCategoryId(entity.getId());
