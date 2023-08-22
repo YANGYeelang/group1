@@ -35,7 +35,7 @@ public class HistoryService {
 
 //______________________________________________Post History_______________________________________
     public ResponseEntity<?> saveHistory(HistoryModel historyModel)  {
-        if (historyModel.getCategoryId() < 4) {
+        if (historyModel.getCategoryId() <= 4) {
             UserEntity entity = this.userRepository.findByEmail(historyModel.getUserEmail());
 
             if (entity != null) {
@@ -56,7 +56,7 @@ public class HistoryService {
                 this.historyRepository.save(history);
                 return ResponseEntity.status(HttpStatus.OK).body("success");
             }
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("You need to login");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Invalid Email");
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Category Id not available");
     }
@@ -73,7 +73,6 @@ public class HistoryService {
                 historyModel.setHistoryId(historyEntity.getHistoryId());
                 historyModel.setCreateDate(historyEntity.getCreateDate());
                 historyModel.setCategoryId(historyEntity.getCategory().getId());
-//                historyModel.setDescription_th();
 
                 List<HistoryDetailEntity> Models = historyEntity.getHistoryDetail();
                 List<DetailModel> DetailModels = new ArrayList<>();
@@ -133,14 +132,13 @@ public class HistoryService {
             historyRepository.deleteById(historyId);
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
            }
-           return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Couldn't not find history match: "+ historyId);
+           return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Couldn't not find history match: "+ historyId);
 
     }
 
     //________________________________________Post History Detail_______________________________________________
 
     public ResponseEntity<?> postHistoryDetail(List<HistoryDetailModel> historyDetail) {
-        try {
             Optional<HistoryEntity> history = this.historyRepository.findById(GHistoryId);
             if (history.isPresent()) {
                 List<HistoryDetailEntity> result = new ArrayList<>();
@@ -166,9 +164,6 @@ public class HistoryService {
                 return ResponseEntity.status(HttpStatus.OK).body("success");
             }
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No history id available");
-        }catch (Exception e){
-            throw  new RuntimeException(e.getMessage());
-        }
 
     }
 

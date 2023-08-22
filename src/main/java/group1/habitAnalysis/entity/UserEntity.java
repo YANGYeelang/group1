@@ -18,6 +18,8 @@ public class UserEntity {
     @Column(nullable = false, length=100)
     private String lastName;
     private String imageUrl;
+    @Column(nullable = false, length=25)
+    private String phoneNumber;
     private LocalDateTime createDate;
 
     @OneToMany(mappedBy = "user", orphanRemoval = true)
