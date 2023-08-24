@@ -3,9 +3,6 @@ package group1.habitAnalysis.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Entity
 @Data
@@ -23,7 +20,5 @@ public class ChoiceEntity {
     @JsonIgnore
     private CategoryEntity category;
 
-    @OneToMany(mappedBy = "choice", orphanRemoval = true, cascade = CascadeType.ALL)
-    private List<HistoryDetailEntity> historyDetail;
 
 }
