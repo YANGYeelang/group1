@@ -50,7 +50,7 @@ public class UserController {
             }
             return ResponseEntity.status(HttpStatus.OK).body(0);
         }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(3);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(3);
         }
 
     }

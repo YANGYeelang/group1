@@ -12,10 +12,10 @@ import java.util.List;
 @Table(name = "history")
 public class HistoryEntity {
     @Id
-    private String HistoryId;
+    private String historyId;
     private LocalDateTime createDate;
-
-//    private Integer categoryId;
+    private String choiceIdLike;
+    private String choiceIdDislike;
 
     @ManyToOne
     @JoinColumn(name = "user_email", nullable = false)
@@ -26,7 +26,4 @@ public class HistoryEntity {
     @JoinColumn(name = "category_id", nullable = false)
     @JsonIgnore
     private CategoryEntity category;
-
-    @OneToMany(mappedBy = "history", orphanRemoval = true)
-    private List<HistoryDetailEntity> historyDetail;
 }

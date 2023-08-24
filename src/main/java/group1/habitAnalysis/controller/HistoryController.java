@@ -1,7 +1,6 @@
 package group1.habitAnalysis.controller;
 
 import group1.habitAnalysis.entity.CategoryEntity;
-import group1.habitAnalysis.model.HistoryDetailModel;
 import group1.habitAnalysis.model.HistoryModel;
 import group1.habitAnalysis.repository.CategoryRepository;
 import group1.habitAnalysis.repository.ChoiceRepository;
@@ -10,7 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Optional;
 
 @CrossOrigin(origins = "http://localhost:3000")
@@ -47,16 +45,8 @@ public class HistoryController {
     }
 
 
-    //______________________________________________History Detail ________________________________________
-    @PostMapping("/api/post/history/detail")
-    public ResponseEntity<?> postTrueDetail(@RequestBody List<HistoryDetailModel> historyDetail){
-        return this.historyService.postHistoryDetail(historyDetail);
-    }
+    //______________________________________________History Description ________________________________________
 
-    @GetMapping("/api/get/history/detail")
-    public ResponseEntity<?> getHistoryDetail(@RequestParam String historyId){
-        return this.historyService.getHistoryDetail(historyId);
-    }
     @GetMapping("/api/get/description")
     public ResponseEntity<?> getDescription(Integer categoryId){
         Optional<CategoryEntity> category = this.categoryRepository.findById(categoryId);
