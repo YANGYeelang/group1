@@ -22,16 +22,19 @@ public class HistoryService {
     private final UserRepository userRepository;
     private final HistoryRepository historyRepository;
     private final ChoiceRepository choiceRepository;
+    private CategoryRepository categoryRepository;
 
-    public HistoryService(UserRepository userRepository, HistoryRepository historyRepository, ChoiceRepository choiceRepository) {
+    public HistoryService(UserRepository userRepository, HistoryRepository historyRepository, ChoiceRepository choiceRepository, CategoryRepository categoryRepository) {
         this.userRepository = userRepository;
         this.historyRepository = historyRepository;
         this.choiceRepository = choiceRepository;
+        this.categoryRepository = categoryRepository;
     }
 
 
 //______________________________________________Post History_______________________________________
     public ResponseEntity<?> saveHistory(HistoryModel historyModel) {
+
         if (historyModel.getCategoryId() <= 4) {
             UserEntity entity = this.userRepository.findByEmail(historyModel.getUserEmail());
 
@@ -74,6 +77,12 @@ public class HistoryService {
                 historyModel.setHistoryId(historyEntity.getHistoryId());
                 historyModel.setCreateDate(historyEntity.getCreateDate());
                 historyModel.setCategoryId(historyEntity.getCategory().getId());
+                Optional<CategoryEntity> category = categoryRepository.findById(historyModel.getCategoryId());
+                if (category.isPresent()){
+                    CategoryEntity categoryEntity = category.get();
+                    historyModel.setCategoryNameEn(categoryEntity.getCategoryNameEn());
+                    historyModel.setCategoryNameTh(categoryEntity.getCategoryNameTh());
+                }
 
                 String choiceIdLikeString = historyEntity.getChoiceIdLike();
                 String[] choiceIdLikeArray = choiceIdLikeString.substring(1, choiceIdLikeString.length() - 1).split(", ");
@@ -111,6 +120,12 @@ public class HistoryService {
             historyModel.setHistoryId(history.getHistoryId());
             historyModel.setCreateDate(history.getCreateDate());
             historyModel.setCategoryId(history.getCategory().getId());
+            Optional<CategoryEntity> category = categoryRepository.findById(historyModel.getCategoryId());
+            if (category.isPresent()){
+                CategoryEntity categoryEntity = category.get();
+                historyModel.setCategoryNameEn(categoryEntity.getCategoryNameEn());
+                historyModel.setCategoryNameTh(categoryEntity.getCategoryNameTh());
+            }
 
             List<ChoiceEntity> choiceLike = new ArrayList<>();
             String choiceIdLikeString = history.getChoiceIdLike();

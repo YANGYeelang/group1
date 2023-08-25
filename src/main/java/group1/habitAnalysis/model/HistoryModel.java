@@ -19,4 +19,6 @@ public class HistoryModel {
     private ArrayList<Integer> choiceIdLike;
     private ArrayList<Integer> choiceIdDisLike;
     private String userEmail;
+    private String categoryNameTh;
+    private String categoryNameEn;
 }
