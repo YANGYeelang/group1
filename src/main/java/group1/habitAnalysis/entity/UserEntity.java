@@ -15,10 +15,10 @@ public class UserEntity {
     private String email;
     @Column(nullable = false, length = 100)
     private String firstName;
-    @Column(nullable = false, length=100)
+    @Column(length=100)
     private String lastName;
     private String imageUrl;
-    @Column(nullable = false, length=25)
+    @Column(length=25)
     private String phoneNumber;
     private LocalDateTime createDate;
 
