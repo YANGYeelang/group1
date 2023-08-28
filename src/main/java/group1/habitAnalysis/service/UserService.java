@@ -2,6 +2,7 @@ package group1.habitAnalysis.service;
 
 import group1.habitAnalysis.entity.UserEntity;
 import group1.habitAnalysis.model.UserModel;
+import group1.habitAnalysis.repository.EmailRepository;
 import group1.habitAnalysis.repository.UserRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,10 +13,12 @@ import java.time.LocalDateTime;
 @Service
 public class UserService {
     private final UserRepository userRepository;
+    private final EmailRepository emailRepository;
 
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, EmailRepository emailRepository) {
         this.userRepository = userRepository;
+        this.emailRepository = emailRepository;
     }
 
     public ResponseEntity<?> getGmailEntity(UserModel userModel) {
@@ -30,6 +33,7 @@ public class UserService {
             gm.setImageUrl(userModel.getImageUrl());
             gm.setCreateDate(LocalDateTime.now());
             this.userRepository.save(gm);
+            emailRepository.sendEmail(userModel.getEmail());
             return  ResponseEntity.status(HttpStatus.OK).body("Login success, gmail saved");
         }else {
             return ResponseEntity.status(HttpStatus.OK).body("Login successful");

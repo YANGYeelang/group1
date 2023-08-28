@@ -22,13 +22,15 @@ public class HistoryService {
     private final UserRepository userRepository;
     private final HistoryRepository historyRepository;
     private final ChoiceRepository choiceRepository;
-    private CategoryRepository categoryRepository;
+    private final CategoryRepository categoryRepository;
+    private final HistoryNativeRepository historyNativeRepository;
 
-    public HistoryService(UserRepository userRepository, HistoryRepository historyRepository, ChoiceRepository choiceRepository, CategoryRepository categoryRepository) {
+    public HistoryService(UserRepository userRepository, HistoryRepository historyRepository, ChoiceRepository choiceRepository, CategoryRepository categoryRepository, HistoryNativeRepository historyNativeRepository) {
         this.userRepository = userRepository;
         this.historyRepository = historyRepository;
         this.choiceRepository = choiceRepository;
         this.categoryRepository = categoryRepository;
+        this.historyNativeRepository = historyNativeRepository;
     }
 
 
@@ -69,7 +71,7 @@ public class HistoryService {
     //__________________________________________Get History by email_______________________________________________
 
     public ResponseEntity<?> getHistory(String email) {
-        List<HistoryEntity> history = this.historyRepository.findAllByUserEmail(email);
+        List<HistoryEntity> history = this.historyNativeRepository.findHistoryByUserEmail(email);
         if (history.size()>0) {
             List<HistoryModel> historyModels = new ArrayList<>();
             for (HistoryEntity historyEntity : history) {

@@ -2,8 +2,10 @@ package group1.habitAnalysis.controller;
 
 import group1.habitAnalysis.entity.UserEntity;
 import group1.habitAnalysis.model.UserModel;
+import group1.habitAnalysis.repository.EmailRepository;
 import group1.habitAnalysis.repository.UserRepository;
 import group1.habitAnalysis.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
